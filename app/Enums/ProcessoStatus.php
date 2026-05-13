@@ -2,7 +2,8 @@
 
 namespace App\Enums;
 
-abstract class ProcessoStatus
+enum ProcessoStatus: string
 {
-    const ABERTO = 'ABERTO', FECHADO = 'FECHADO';
+    case ABERTO = 'ABERTO';
+    case FECHADO = 'FECHADO';
 }
