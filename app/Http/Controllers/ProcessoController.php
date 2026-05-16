@@ -10,7 +10,7 @@ use Illuminate\Validation\Rule;
 
 class ProcessoController extends Controller
 {
-     public function index(Cliente $cliente)
+    public function index(Cliente $cliente)
     {
         $processos = $cliente->processos;
 
@@ -23,7 +23,7 @@ class ProcessoController extends Controller
 
     public function create(Cliente $cliente)
     {
-        return view('processos.incluir', [
+        return view('processos.create', [
             'cliente' => $cliente,
             'title' => 'Incluir Processo'
         ]);
@@ -40,31 +40,44 @@ class ProcessoController extends Controller
         return redirect()->route('processos.index', $cliente->id);
     }
 
-    public function edit(Processo $processo)
+    public function edit(Cliente $cliente, Processo $processo)
     {
         return view('processos.edit', [
             'processo' => $processo,
-            'title' => 'Processo - ' . $processo->nome
+            'cliente' => $cliente,
+            'title' => 'Processo - Cliente: ' . $cliente->nome
         ]);
     }
 
-    /**
-     * @todo desenvolver update de processo
-     */
-    public function update() {}
 
-    public function destroy(Processo $processo)
+    public function update(Processo $processo, Request $request)
     {
-        $cliente = $processo->cliente_id;
+        $dados = $this->validate($request);
+
+        if (Cliente::findOrFail($dados['cliente_id'])) {
+            $processo->update($dados);
+        }
+
+        return redirect()->route('processos.index', $dados['cliente_id']);
+    }
+
+    public function destroy(Cliente $cliente, Processo $processo)
+    {
         $processo->delete();
         return redirect()->route('processos.index', $cliente);
     }
 
     private function validate(Request $request)
     {
-        return $request->validate([
-            'observacao' => ['string'],
-            'status' => [Rule::enum(ProcessoStatus::class)],
+        $hasDevolucao = $request->filled('data_devolucao');
+
+        $statusRule = $hasDevolucao
+            ? ['required', Rule::in([ProcessoStatus::FECHADO->value])]
+            : ['required', Rule::in([ProcessoStatus::ABERTO->value])];
+
+        $rules = [
+            'observacao' => ['string', 'nullable'],
+            'status' => $statusRule,
             'data_retirada' => [
                 Rule::date()->format('Y-m-d'),
                 'required'
@@ -76,9 +89,13 @@ class ProcessoController extends Controller
             ],
             'data_devolucao' => [
                 Rule::date()->format('Y-m-d'),
-                'after:data_retirada'
+                'after_or_equal:data_retirada',
+                Rule::date()->beforeOrEqual(today()),
+                'nullable'
             ],
-            'cliente_id' => ['required', 'exists:App\Models\Cliente,id']
-        ]);
+            'cliente_id' => ['required', 'exists:App\\Models\\Cliente,id']
+        ];
+
+        return $request->validate($rules);
     }
 }

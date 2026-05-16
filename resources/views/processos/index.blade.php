@@ -15,12 +15,13 @@
         <div>
 
             Processo -
-            @if ($proc->data_devolucao == null && $proc->status == App\Enums\ProcessoStatus::ABERTO)
-                Retirada
+            @if ($proc->status == App\Enums\ProcessoStatus::ABERTO->value)
+                Retirado
             @else
-                Devolução
+                Devolvido
             @endif
-            - <a href="{{ route('processos.destroy', $proc->id) }}">Excluir</a>
+            - <a href="{{ route('processos.edit', [$cliente->id, $proc->id]) }}">Editar</a>
+            - <a href="{{ route('processos.destroy', [$cliente->id, $proc->id]) }}">Excluir</a>
         </div>
 
     @endforeach
