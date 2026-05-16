@@ -15,7 +15,7 @@
 
     @if ($errors->any)
         @foreach ($errors->all() as $err)
-            <div>
+            <div style="color: red;">
                 {{ $err }}
             </div>
         @endforeach

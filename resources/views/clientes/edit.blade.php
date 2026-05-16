@@ -44,14 +44,14 @@
                 name="sexo"
                 id="sexo"
                 value="{{ App\Enums\SexoCliente::MASCULINO }}"
-                @checked($cliente->sexo == 'M')
+                @checked($cliente->sexo == App\Enums\SexoCliente::MASCULINO->value)
             >Masculino
             <input
                 type="radio"
                 name="sexo"
                 id="sexo"
                 value="{{ App\Enums\SexoCliente::FEMININO }}"
-                @checked($cliente->sexo == 'F')
+                @checked($cliente->sexo == App\Enums\SexoCliente::FEMININO->value)
             >Feminino
         </div>
         <input type="submit" value="Enviar">
