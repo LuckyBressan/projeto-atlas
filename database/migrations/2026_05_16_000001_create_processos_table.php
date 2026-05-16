@@ -23,7 +23,7 @@ return new class extends Migration {
             $table->date('data_devolucao')->nullable(true);
             /** @todo Aguardando desenvolvimento da tabela livro */
             // $table->foreignId('livro_id')->constrained('livro');
-            $table->foreignId('cliente_id')->constrained('cliente');
+            $table->foreignId('cliente_id')->constrained('clientes');
             $table->timestamps();
         });
     }
