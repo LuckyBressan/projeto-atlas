@@ -19,7 +19,7 @@
             </div>
         @endforeach
         <br>
-        <br>igrej
+        <br>
     @endif
 
     <form action="{{ route('clientes.update', $cliente->id) }}" method="post">

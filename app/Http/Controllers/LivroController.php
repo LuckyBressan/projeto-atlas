@@ -32,6 +32,7 @@ class LivroController extends Controller
 
     public function store(Request $request)
     {
+        $dados['status'] = LivroStatus::DISPONIVEL->value;
         $dados = $this->validateLivro($request);
         Livro::create($dados);
         return redirect()->route('livros.index');
@@ -57,8 +58,14 @@ class LivroController extends Controller
 
     public function delete(Livro $livro)
     {
+        if ($livro->processos()->exists()) {
+            return redirect()->route('livros.index')
+                ->with('error', 'Não é possível deletar este livro pois ele está vinculado a um processo.');
+        }
+        
         $livro->delete();
-        return redirect()->route('livros.index');
+        return redirect()->route('livros.index')
+            ->with('success', 'Livro deletado com sucesso.');
     }
 
     private function validateLivro(Request $request)
@@ -67,7 +74,7 @@ class LivroController extends Controller
             'titulo'       => ['required', 'string', 'min:2', 'max:100'],
             'descricao'    => ['nullable', 'string'],
             'autor'        => ['required', 'string', 'min:2', 'max:100'],
-            'status'       => ['required', Rule::enum(LivroStatus::class)],
+            'status'       => [ Rule::enum(LivroStatus::class)],
             'categoria_id' => ['required', 'exists:App\\Models\\Categoria,id'],
         ]);
     }

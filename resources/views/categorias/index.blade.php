@@ -8,6 +8,14 @@
 
     <a href="{{ route('categorias.create') }}">Incluir Categoria</a>
 
+    @if ($message = session('error'))
+        <div class="alert alert-danger">{{ $message }}</div>
+    @endif
+
+    @if ($message = session('success'))
+        <div class="alert alert-success">{{ $message }}</div>
+    @endif
+
     @foreach ($categorias as $categoria)
 
         <div>

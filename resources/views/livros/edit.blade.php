@@ -35,16 +35,6 @@
             <textarea name="descricao" id="descricao">{{ old('descricao', $livro->descricao) }}</textarea>
         </div>
         <div>
-            <label for="status">Status</label>
-            <select name="status" id="status">
-                @foreach (App\Enums\LivroStatus::cases() as $status)
-                    <option value="{{ $status->value }}" @selected(old('status', $livro->status) == $status->value)>
-                        {{ $status->value }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-        <div>
             <label for="categoria_id">Categoria</label>
             <select name="categoria_id" id="categoria_id">
                 @foreach ($categorias as $categoria)

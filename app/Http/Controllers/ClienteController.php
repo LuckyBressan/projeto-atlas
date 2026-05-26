@@ -52,8 +52,11 @@ class ClienteController extends Controller
 
     public function delete(Cliente $cliente)
     {
+        if($cliente->processos()->count() > 0) {
+            return redirect()->route('clientes.index')->with('error', 'Não é possível excluir o cliente, pois existem processos associados a ele.');
+        }
         $cliente->delete();
-        return redirect()->route('clientes.index');
+        return redirect()->route('clientes.index')->with('success', 'Cliente deletado com sucesso.');
     }
 
     private function validate(Request $request)

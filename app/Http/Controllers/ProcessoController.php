@@ -76,6 +76,8 @@ class ProcessoController extends Controller
 
             if ($processo->status === ProcessoStatus::FECHADO->value) {
                 Livro::findOrFail($dados['livro_id'])->update(['status' => LivroStatus::DISPONIVEL]);
+            } else {
+                Livro::findOrFail($dados['livro_id'])->update(['status' => LivroStatus::EMPRESTADO]);
             }
         }
 

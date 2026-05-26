@@ -11,7 +11,7 @@ return new class extends Migration {
             if (!Schema::hasColumn('processos', 'livro_id')) {
                 $table->foreignId('livro_id')->nullable()->after('data_devolucao');
             }
-            $table->foreign('livro_id')->references('id')->on('livros')->nullOnDelete();
+            $table->foreign('livro_id')->references('id')->on('livros')->restrictOnDelete();
         });
     }
 

@@ -48,8 +48,11 @@ class CategoriaController extends Controller
 
     public function delete(Categoria $categoria)
     {
+        if($categoria->livros()->count() > 0) {
+            return redirect()->route('categorias.index')->with('error', 'Não é possível excluir a categoria, pois existem livros associados a ela.');
+        }
         $categoria->delete();
-        return redirect()->route('categorias.index');
+        return redirect()->route('categorias.index')->with('success', 'Categoria deletada com sucesso.');
     }
 
     private function validateCategoria(Request $request)
