@@ -15,6 +15,7 @@
         <div>
 
             Processo -
+            {{ $proc->livro?->titulo ?? 'Livro não informado' }} -
             @if ($proc->status == App\Enums\ProcessoStatus::ABERTO->value)
                 Retirado
             @else

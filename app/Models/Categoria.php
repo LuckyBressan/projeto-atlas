@@ -10,4 +10,9 @@ class Categoria extends Model
         'titulo',
         'descricao',
     ];
+
+    public function livros()
+    {
+        return $this->hasMany(Livro::class);
+    }
 }

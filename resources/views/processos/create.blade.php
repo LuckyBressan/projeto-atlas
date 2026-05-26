@@ -25,6 +25,17 @@
         @csrf
         <input type="hidden" name="cliente_id" value="{{ $cliente->id }}">
         <div>
+            <label for="livro_id">Livro</label>
+            <select name="livro_id" id="livro_id">
+                <option value="">Selecione um livro</option>
+                @foreach ($livros as $livro)
+                    <option value="{{ $livro->id }}" @selected(old('livro_id') == $livro->id)>
+                        {{ $livro->titulo }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+        <div>
             <label for="observacao">Observação</label>
             <textarea name="observacao" id="observacao"></textarea>
         </div>

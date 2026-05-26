@@ -12,9 +12,14 @@ class Processo extends Model
         'data_retirada',
         'data_prevista',
         'data_devolucao',
+        'livro_id',
     ];
 
     public function cliente() {
         return $this->belongsTo(Cliente::class);
+    }
+
+    public function livro() {
+        return $this->belongsTo(Livro::class);
     }
 }
