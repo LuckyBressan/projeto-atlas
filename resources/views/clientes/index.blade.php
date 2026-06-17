@@ -4,25 +4,61 @@
 
 @section('content')
 
-    <h1>Lista de {{ $title }}</h1>
+    <x-card title="Lista de {{ $title }}" description="Dados dos clientes da biblioteca">
+        <div class="flex flex-col gap-3">
+            <div>
+                <a href="{{ route('clientes.create') }}" class="btn">
+                    <x-lucide-plus-circle></x-lucide-plus-circle>
+                    Incluir
+                </a>
+            </div>
 
-    <a href="{{ route('clientes.create') }}">Incluir Cliente</a>
+            <x-table>
+                <x-slot name="header">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>CPF</th>
+                        <th>Data de Nascimento</th>
+                        <th></th>
+                    </tr>
+                </x-slot>
+                @foreach ($clientes as $cliente)
 
-    @if ($message = session('error'))
-        <div class="alert alert-danger">{{ $message }}</div>
-    @endif
+                    <tr>
+                        <td>
+                            {{ $cliente->id }}
+                        </td>
+                        <td>
+                            {{ $cliente->nome }}
+                        </td>
+                        <td>
+                            {{ $cliente->cpf_formatted }}
+                        </td>
+                        <td>
+                            {{ $cliente->data_nascimento_formatted }}
+                        </td>
+                        <td>
+                            <a href="{{ route('clientes.edit', $cliente->id) }}" class="btn-outline btn-edit"
+                                data-tooltip="Editar">
+                                <x-lucide-edit></x-lucide-edit>
+                            </a>
+                            <a href="{{ route('clientes.delete', $cliente->id) }}" class="btn-outline btn-delete aspect-square"
+                                data-tooltip="Excluir">
+                                <x-lucide-trash-2/>
+                            </a>
+                        </td>
+                    </tr>
 
-    @if ($message = session('success'))
-        <div class="alert alert-success">{{ $message }}</div>
-    @endif
-
-    @foreach ($clientes as $cliente)
-
-        <div>
-            {{ $cliente->id }} - {{ $cliente->nome }}
-            - <a href="{{ route('clientes.edit', $cliente->id) }}">Editar</a>
-            - <a href="{{ route('clientes.delete', $cliente->id) }}">Excluir</a>
+                @endforeach
+            </x-table>
         </div>
 
-    @endforeach
+
+    </x-card>
+
+    @if (isset($message))
+        <x-alert-area message="{{ $message }}"></x-alert-area>
+    @endif
+
 @endsection
