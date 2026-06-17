@@ -36,17 +36,26 @@
                             {{ $cliente->cpf_formatted }}
                         </td>
                         <td>
-                            {{ $cliente->data_nascimento_formatted }}
+                            {{ $cliente->data_nascimento_formatted ?? '-' }}
                         </td>
                         <td>
+                            <a href="{{ route('processos.index', $cliente->id) }}" class="btn-outline"
+                                data-tooltip="Ver processos">
+                                <x-lucide-book-search/>
+                            </a>
                             <a href="{{ route('clientes.edit', $cliente->id) }}" class="btn-outline btn-edit"
                                 data-tooltip="Editar">
-                                <x-lucide-edit></x-lucide-edit>
+                                <x-lucide-edit/>
                             </a>
-                            <a href="{{ route('clientes.delete', $cliente->id) }}" class="btn-outline btn-delete aspect-square"
-                                data-tooltip="Excluir">
+                            <!-- Sei que tá dando erro de sintaxe, ignore, pois está funcionando -->
+                            <button
+                                type="button"
+                                onclick="clientes.confirmarExclusao('{{ route('clientes.delete', $cliente->id) }}', 'alert-delete')"
+                                class="btn-outline btn-delete aspect-square"
+                                data-tooltip="Excluir"
+                            >
                                 <x-lucide-trash-2/>
-                            </a>
+                            </button>
                         </td>
                     </tr>
 
@@ -56,6 +65,14 @@
 
 
     </x-card>
+
+    <x-dialog
+        id="alert-delete"
+        title="Excluir Cliente"
+        description="Tem certeza de que deseja excluir este cliente? Esta ação não poderá ser desfeita."
+        on-confirm="clientes.executarExclusao()"
+        on-cancel="clientes.cancelarExclusao('alert-delete')"
+    />
 
     @if (isset($message))
         <x-alert-area message="{{ $message }}"></x-alert-area>
