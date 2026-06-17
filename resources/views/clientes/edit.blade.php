@@ -2,117 +2,80 @@
 
 @section('title', $title)
 
-
-
 @section('content')
 
-    <x-card title="{{ $title }}" description="Informe os dados para inclusão do cliente">
-        <a href="{{ route('clientes.index') }}">Home</a>
+    <div class="grid gap-2">
+        <a href="{{ route('clientes.index') }}" class="btn-outline w-max">
+            <x-lucide-arrow-big-left-dash/>
+            Home
+        </a>
+        <x-card title="{{ $title }}" description="Altere os dados do cliente cadastrado">
 
-        <br>
-        <br>
+            <div class="grid gap-2">
+                @if ($errors->any)
+                    <fieldset class="grid gap-3">
+                        @foreach ($errors->all() as $err)
+                            <x-alert title="Ops! Algo deu errado" type="destructive">
+                                <x-slot name="icon">
+                                    <x-lucide-circle-alert/>
+                                </x-slot>
+                                {{ $err }}
+                            </x-alert>
+                        @endforeach
+                    </fieldset>
 
-        @if ($errors->any)
-            @foreach ($errors->all() as $err)
-                <div style="color: red;">
-                    {{ $err }}
-                </div>
-            @endforeach
-        @endif
+                @endif
 
-        <x-form action="{{ route('clientes.store') }}" method="post">
-            @csrf
-            <x-input
-                id="nome"
-                type="text"
-                title="Nome"
-                name="nome"
-                placeholder="ex: Romario da Silva"
-            />
+                <x-form action="{{ route('clientes.update', $cliente->id) }}" method="post">
+                    @csrf
+                    @method('PATCH')
 
-            <fieldset class="grid grid-cols-2 gap-3">
-                <x-input
-                    id="cpf"
-                    type="text"
-                    title="CPF"
-                    name="cpf"
-                    placeholder="XXX-XXX-XXX-XX"
-                />
-
-                <x-input
-                    id="data_nascimento"
-                    type="date"
-                    title="Data de Nascimento"
-                    name="data_nascimento"
-                    placeholder="XXX-XXX-XXX-XX"
-                />
-            </fieldset>
-
-            <fieldset class="grid gap-3">
-                <label>
-                    Sexo
-                </label>
-                @foreach ([App\Enums\SexoCliente::MASCULINO, App\Enums\SexoCliente::FEMININO] as $sexo)
-                    <x-radio
-                        name="sexo"
-                        id="sexo"
-                        value="{{ $sexo->value }}"
-                        checked="{{ $sexo->value == App\Enums\SexoCliente::MASCULINO->value }}"
-                        label="{{ $sexo->name }}"
+                    <x-input
+                        id="nome"
+                        title="Nome"
+                        name="nome"
+                        placeholder="ex: Romario da Silva"
+                        value="{{ $cliente->nome }}"
+                        required
                     />
-                @endforeach
-            </fieldset>
-        </x-form>
-    </x-card>
 
-    <h1>{{ $title }}</h1>
+                    <fieldset class="grid grid-cols-2 gap-3">
+                        <x-input
+                            id="cpf"
+                            title="CPF"
+                            name="cpf"
+                            placeholder="XXX-XXX-XXX-XX"
+                            value="{{ $cliente->cpf }}"
+                            required
+                        />
 
-    <a href="{{ route('clientes.index') }}">Home</a>
+                        <x-input
+                            id="data_nascimento"
+                            type="date"
+                            title="Data de Nascimento"
+                            name="data_nascimento"
+                            value="{{ $cliente->data_nascimento }}"
+                        />
+                    </fieldset>
 
-    @if ($errors->any)
-        <br>
-        <br>
-        @foreach ($errors->all() as $err)
-            <div style="color: red;">
-                {{ $err }}
+                    <fieldset class="grid gap-3">
+                        <label>
+                            Sexo
+                        </label>
+                        <div class="flex gap-3">
+                            @foreach ([App\Enums\SexoCliente::MASCULINO, App\Enums\SexoCliente::FEMININO] as $sexo)
+                                <x-radio
+                                    name="sexo"
+                                    id="sexo"
+                                    value="{{ $sexo->value }}"
+                                    checked="{{ $cliente->sexo == $sexo->value }}"
+                                    label="{{ $sexo->name }}"
+                                />
+                            @endforeach
+                        </div>
+                    </fieldset>
+                </x-form>
             </div>
-        @endforeach
-        <br>
-        <br>
-    @endif
-
-    <form action="{{ route('clientes.update', $cliente->id) }}" method="post">
-        @csrf
-        @method('PATCH')
-        <div>
-            <label for="nome">Nome</label>
-            <input type="text" name="nome" id="nome" value="{{ $cliente->nome }}">
-        </div>
-        <div>
-            <label for="cpf">CPF</label>
-            <input type="text" name="cpf" id="cpf" value="{{ $cliente->cpf }}">
-        </div>
-        <div>
-            <label for="data_nascimento">Data de Nascimento</label>
-            <input type="date" name="data_nascimento" id="data_nascimento" value="{{ $cliente->data_nascimento }}">
-        </div>
-        <div>
-            <label for="sexo">Sexo</label>
-            <input
-                type="radio"
-                name="sexo"
-                id="sexo"
-                value="{{ App\Enums\SexoCliente::MASCULINO }}"
-                @checked($cliente->sexo == App\Enums\SexoCliente::MASCULINO->value)
-            >Masculino
-            <input
-                type="radio"
-                name="sexo"
-                id="sexo"
-                value="{{ App\Enums\SexoCliente::FEMININO }}"
-                @checked($cliente->sexo == App\Enums\SexoCliente::FEMININO->value)
-            >Feminino
-        </div>
-        <input type="submit" value="Enviar">
-    </form>
+        </x-card>
+    </div>
 @endsection
