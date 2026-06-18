@@ -2,44 +2,77 @@
 
 @section('title', $title)
 
-
-
 @section('content')
 
-    <h1>{{ $title }}</h1>
+    <div class="grid gap-2">
+        <a href="{{ route('clientes.index') }}" class="btn-outline w-max">
+            <x-lucide-arrow-big-left-dash/>
+            Home
+        </a>
+        <x-card title="{{ $title }}" description="Informe os dados para inclusão do cliente">
 
-    <a href="{{ route('clientes.index') }}">Home</a>
+            <div class="grid gap-2">
+                @if ($errors->any)
+                    <fieldset class="grid gap-3">
+                        @foreach ($errors->all() as $err)
+                            <x-alert title="Ops! Algo deu errado" type="destructive">
+                                <x-slot name="icon">
+                                    <x-lucide-circle-alert/>
+                                </x-slot>
+                                {{ $err }}
+                            </x-alert>
+                        @endforeach
+                    </fieldset>
 
-    <br>
-    <br>
+                @endif
 
-    @if ($errors->any)
-        @foreach ($errors->all() as $err)
-            <div style="color: red;">
-                {{ $err }}
+                <x-form action="{{ route('clientes.store') }}" method="post">
+                    @csrf
+                    <x-input
+                        id="nome"
+                        title="Nome"
+                        name="nome"
+                        placeholder="ex: Romario da Silva"
+                        required
+                    />
+
+                    <fieldset class="grid grid-cols-2 gap-3">
+                        <x-input
+                            id="cpf"
+                            title="CPF"
+                            name="cpf"
+                            placeholder="XXX-XXX-XXX-XX"
+                            required
+                        />
+
+                        <x-input
+                            id="data_nascimento"
+                            type="date"
+                            title="Data de Nascimento"
+                            name="data_nascimento"
+                        />
+                    </fieldset>
+
+                    <fieldset class="grid gap-3">
+                        <label>
+                            Sexo
+                        </label>
+                        <div class="flex gap-3">
+                            @foreach ([App\Enums\SexoCliente::MASCULINO, App\Enums\SexoCliente::FEMININO] as $sexo)
+                                <x-radio
+                                    class="cursor-pointer"
+                                    name="sexo"
+                                    id="sexo"
+                                    value="{{ $sexo->value }}"
+                                    checked="{{ $sexo->value == App\Enums\SexoCliente::MASCULINO->value }}"
+                                    label="{{ $sexo->name }}"
+                                />
+                            @endforeach
+                        </div>
+                    </fieldset>
+                </x-form>
             </div>
-        @endforeach
-    @endif
+        </x-card>
+    </div>
 
-    <form action="{{ route('clientes.store') }}" method="post">
-        @csrf
-        <div>
-            <label for="nome">Nome</label>
-            <input type="text" name="nome" id="nome">
-        </div>
-        <div>
-            <label for="cpf">CPF</label>
-            <input type="text" name="cpf" id="cpf">
-        </div>
-        <div>
-            <label for="data_nascimento">Data de Nascimento</label>
-            <input type="date" name="data_nascimento" id="data_nascimento">
-        </div>
-        <div>
-            <label for="sexo">Sexo</label>
-            <input type="radio" name="sexo" id="sexo" value="{{ App\Enums\SexoCliente::MASCULINO }}" checked>Masculino
-            <input type="radio" name="sexo" id="sexo" value="{{ App\Enums\SexoCliente::FEMININO }}">Feminino
-        </div>
-        <input type="submit" value="Enviar">
-    </form>
 @endsection

@@ -11,7 +11,7 @@ class ClienteController extends Controller
 {
     public function index()
     {
-        $clientes = Cliente::all();
+        $clientes = Cliente::orderBy('id', 'asc')->get();
 
         return view('clientes.index', [
             'clientes' => $clientes,
@@ -64,7 +64,7 @@ class ClienteController extends Controller
         return $request->validate([
             'nome' => 'string|required|min:4|max:100',
             'cpf' => ['required', new \App\Rules\CpfValidation],
-            'data_nascimento' => Rule::date()->format('Y-m-d'),
+            'data_nascimento' => ['nullable', Rule::date()->format('Y-m-d')],
             'sexo' => [Rule::enum(SexoCliente::class)]
         ]);
     }
