@@ -61,7 +61,7 @@
                                 <!-- Sei que tá dando erro de sintaxe, ignore, pois está funcionando -->
                                 <button
                                     type="button"
-                                    onclick="clientes.confirmarExclusao('{{ route('clientes.delete', $cliente->id) }}', 'alert-delete')"
+                                    onclick="modal.confirmarExclusao('{{ route('clientes.delete', $cliente->id) }}', 'alert-delete')"
                                     class="btn-outline btn-delete aspect-square"
                                     data-tooltip="Excluir"
                                 >
@@ -82,12 +82,10 @@
         id="alert-delete"
         title="Excluir Cliente"
         description="Tem certeza de que deseja excluir este cliente? Esta ação não poderá ser desfeita."
-        on-confirm="clientes.executarExclusao()"
-        on-cancel="clientes.cancelarExclusao('alert-delete')"
+        on-confirm="modal.executarExclusao()"
+        on-cancel="modal.cancelarExclusao('alert-delete')"
     />
 
-    @if (isset($message))
-        <x-alert-area message="{{ $message }}"></x-alert-area>
-    @endif
+    <x-alert-area />
 
 @endsection
