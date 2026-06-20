@@ -14,5 +14,5 @@ Route::get('processos/incluir/{cliente}', [ProcessoController::class, 'create'])
 Route::post('processos/incluir', [ProcessoController::class, 'store'])->name('processos.store'); // Salva as informações
 
 //Deletar
-Route::get('processos/{cliente}/excluir/{processo}', [ProcessoController::class, 'destroy'])->name('processos.destroy'); //Deleta de fato
+Route::get('processos/{cliente}/excluir/{processo}', [ProcessoController::class, 'delete'])->name('processos.delete'); //Deleta de fato
 
