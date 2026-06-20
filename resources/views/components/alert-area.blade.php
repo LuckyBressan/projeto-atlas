@@ -1,21 +1,33 @@
-<div class="grid w-full max-w-xl items-start gap-4">
-    @if ($message = session('error'))
-        <div class="alert-destructive">
-            <x-lucide-circle-alert></x-lucide-circle-alert>
-            <h2>Algo deu errado!</h2>
-            <section>
-                {{ $message }}
-            </section>
-        </div>
-    @endif
+@if ($message = session('error'))
+    <script defer>
+        //timeout necessário para que o js do toast carregue corretamente e permita disparar o aviso
+        setTimeout(() => {
+            document.dispatchEvent(new CustomEvent('basecoat:toast', {
+                detail: {
+                    config: {
+                        category: 'error',
+                        title: 'Algo deu errado!',
+                        description: '{{ $message }}',
+                    }
+                }
+            }))
+        }, 250);
+    </script>
+@endif
 
-    @if ($message = session('success'))
-        <div class="alert">
-            <x-lucide-circle-check></x-lucide-circle-check>
-            <h2>Sucesso! Suas mudanças foram salvas.</h2>
-            <section>
-                {{ $message }}
-            </section>
-        </div>
-    @endif
-</div>
+@if ($message = session('success'))
+    <script defer>
+        //timeout necessário para que o js do toast carregue corretamente e permita disparar o aviso
+        setTimeout(() => {
+            document.dispatchEvent(new CustomEvent('basecoat:toast', {
+                detail: {
+                    config: {
+                        category: 'success',
+                        title: 'Sucesso!',
+                        description: '{{ $message }}',
+                    }
+                }
+            }))
+        }, 250);
+    </script>
+@endif
