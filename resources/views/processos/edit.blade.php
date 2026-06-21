@@ -40,8 +40,9 @@
                         id="observacao"
                         title="Observação"
                         placeholder="Ex: livro devolvido/retirado com defeito"
-                        value="{{ $processo->observacao }}"
-                    />
+                    >
+                        {{ $processo->observacao }}
+                    </x-textarea>
 
                     <fieldset class="grid grid-cols-1 md:grid-cols-3 gap-3">
                         <x-input type="date" id="data_retirada" title="Data de Retirada" value="{{ $processo->data_retirada }}" />

@@ -5,6 +5,7 @@
 
 <div class="grid gap-2">
     <label for="{{ $id }}" class="label">{{ $title }}</label>
-    <textarea id="{{ $id }}" {{ $attributes->merge(['name' => $id]) }}></textarea>
-    {{ $slot }}
+    <textarea id="{{ $id }}" {{ $attributes->merge(['name' => $id]) }}>
+        {{ $slot }}
+    </textarea>
 </div>
