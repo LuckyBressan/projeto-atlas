@@ -23,6 +23,18 @@ class ProcessoController extends Controller
         ]);
     }
 
+    public function search()
+    {
+        $clientes = Cliente::all();
+
+        $clientes = $this->clienteToArraySearch($clientes);
+
+        return view('processos.search', [
+            'clientes' => $clientes,
+            'title' => 'Buscar processos do cliente'
+        ]);
+    }
+
     public function create(Cliente $cliente)
     {
         $livros = Livro::with('categoria')
@@ -160,5 +172,15 @@ class ProcessoController extends Controller
                 })->values()->toArray(),
             ];
         })->values()->toArray();
+    }
+
+    private function clienteToArraySearch($clientes): array
+    {
+        return array_map(function($cliente) {
+            return [
+                'name' => $cliente['id'],
+                'title' => $cliente['nome']
+            ];
+        }, $clientes->toArray());
     }
 }

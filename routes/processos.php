@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProcessoController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('processos', [ProcessoController::class, 'search'])->name('processos.search');
 
 Route::get('processos/{cliente}', [ProcessoController::class, 'index'])->name('processos.index'); //Acessar a view de listagem
 
