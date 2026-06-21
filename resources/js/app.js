@@ -1,3 +1,3 @@
-import { clientes } from "./clientes";
+import { modal } from "./modal";
 
-window['clientes'] = clientes
+window['modal'] = modal

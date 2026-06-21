@@ -25,7 +25,11 @@ class ProcessoController extends Controller
 
     public function create(Cliente $cliente)
     {
-        $livros = Livro::where('status', LivroStatus::DISPONIVEL)->get();
+        $livros = Livro::with('categoria')
+            ->where('status', LivroStatus::DISPONIVEL)
+            ->get();
+
+        $livros = $this->organizaLivrosPorCategoria($livros);
 
         return view('processos.create', [
             'cliente' => $cliente,
@@ -49,9 +53,12 @@ class ProcessoController extends Controller
 
     public function edit(Cliente $cliente, Processo $processo)
     {
-        $livros = Livro::where('status', LivroStatus::DISPONIVEL)
+        $livros = Livro::with('categoria')
+            ->where('status', LivroStatus::DISPONIVEL)
             ->orWhere('id', $processo->livro_id)
             ->get();
+
+        $livros = $this->organizaLivrosPorCategoria($livros);
 
         return view('processos.edit', [
             'processo' => $processo,
@@ -84,7 +91,7 @@ class ProcessoController extends Controller
         return redirect()->route('processos.index', $dados['cliente_id']);
     }
 
-    public function destroy(Cliente $cliente, Processo $processo)
+    public function delete(Cliente $cliente, Processo $processo)
     {
         if ($processo->livro_id && $processo->status === ProcessoStatus::ABERTO->value) {
             Livro::findOrFail($processo->livro_id)->update(['status' => LivroStatus::DISPONIVEL]);
@@ -121,9 +128,37 @@ class ProcessoController extends Controller
                 'nullable'
             ],
             'cliente_id' => ['required', 'exists:App\\Models\\Cliente,id'],
-            'livro_id' => ['required', 'exists:App\\Models\\Livro,id'],
+            'livro-value' => ['required', 'exists:App\\Models\\Livro,id'],
         ];
 
-        return $request->validate($rules);
+        $dados = $request->validate($rules);
+
+        $dados['livro_id'] = $dados['livro-value'];
+
+        return $dados;
+    }
+
+    /**
+     * Busca os livros e os organiza em uma estrutura de array com a categoria
+     * @annotation útil para a listagem de livros da tela de cadastro de processo
+     * @return array
+     */
+    private function organizaLivrosPorCategoria($livros): array
+    {
+        return $livros->groupBy('categoria_id')->map(function ($livrosPorCategoria) {
+            // Pega a categoria do primeiro livro deste grupo
+            $categoria = $livrosPorCategoria->first()->categoria;
+
+            return [
+                'name'  => $categoria->id,
+                'title' => $categoria->titulo,
+                'group' => $livrosPorCategoria->map(function ($livro) {
+                    return [
+                        'name'  => $livro->id,
+                        'title' => $livro->titulo,
+                    ];
+                })->values()->toArray(),
+            ];
+        })->values()->toArray();
     }
 }

@@ -7,12 +7,12 @@
     <div class="grid gap-2">
         <a href="{{ route('clientes.index') }}" class="btn-outline w-max">
             <x-lucide-arrow-big-left-dash/>
-            Home
+            Voltar
         </a>
         <x-card title="{{ $title }}" description="Informe os dados para inclusão do cliente">
 
-            <div class="grid gap-2">
-                @if ($errors->any)
+            <div class="grid gap-6">
+                @if (!$errors->isEmpty())
                     <fieldset class="grid gap-3">
                         @foreach ($errors->all() as $err)
                             <x-alert title="Ops! Algo deu errado" type="destructive">

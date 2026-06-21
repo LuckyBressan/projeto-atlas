@@ -31,7 +31,7 @@ class ClienteController extends Controller
         $dados = $this->validate($request);
         $dados['cpf'] = $this->removeCpfMask($dados['cpf']);
         Cliente::create($dados);
-        return redirect()->route('clientes.index');
+        return redirect()->route('clientes.index')->with('success', 'Cliente inserido com sucesso.');;
     }
 
     public function edit(Cliente $cliente)
@@ -47,7 +47,7 @@ class ClienteController extends Controller
         $dados = $this->validate($request);
         $dados['cpf'] = $this->removeCpfMask($dados['cpf']);
         $cliente->update($dados);
-        return redirect()->route('clientes.index');
+        return redirect()->route('clientes.index')->with('success', 'Cliente atualizado com sucesso.');
     }
 
     public function delete(Cliente $cliente)

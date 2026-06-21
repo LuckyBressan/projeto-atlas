@@ -1,4 +1,4 @@
-export const clientes = (() => {
+export const modal = (() => {
     let rotaExclusaoAtual = '';
 
 

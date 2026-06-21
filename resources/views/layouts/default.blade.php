@@ -26,6 +26,7 @@
             </div>
         </section>
     </main>
+    <div id="toaster" class="toaster"></div>
 </body>
 
 </html>
