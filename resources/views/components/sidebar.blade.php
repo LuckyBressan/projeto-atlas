@@ -6,20 +6,27 @@
 
                 <ul>
                     <li>
-                        <a href="/clientes">
+                        <a href="{{ route('clientes.index') }}">
                             <x-lucide-users></x-lucide-users>
                             <span>Clientes</span>
                         </a>
                     </li>
 
                     <li>
-                        <a href="/livros">
+                        <a href="{{ route('clientes.index') }}">
+                            <x-lucide-book-search></x-lucide-book-search>
+                            <span>Processos</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('livros.index') }}">
                             <x-lucide-book-open-text></x-lucide-book-open-text>
                             <span>Livros</span>
                         </a>
                     </li>
                     <li>
-                        <a href="/categorias">
+                        <a href="{{ route('categorias.index') }}">
                             <x-lucide-square-stack></x-lucide-square-stack>
                             <span>Categorias</span>
                         </a>
