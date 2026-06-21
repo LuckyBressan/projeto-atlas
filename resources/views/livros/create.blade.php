@@ -3,47 +3,94 @@
 @section('title', $title)
 
 @section('content')
+    <div class="grid gap-2">
+        <a href="{{ route('livros.index') }}" class="btn-outline w-max">
+            <x-lucide-arrow-big-left-dash/>
+            Voltar
+        </a>
 
-    <h1>{{ $title }}</h1>
+        <x-card title="{{ $title }}" description="Informe os dados para inclusão do livro">
+            <div class="grid gap-6">
+                @if (!$errors->isEmpty())
+                    <fieldset class="grid gap-3">
+                        @foreach ($errors->all() as $err)
+                            <x-alert title="Ops! Algo deu errado" type="destructive">
+                                <x-slot name="icon">
+                                    <x-lucide-circle-alert/>
+                                </x-slot>
+                                {{ $err }}
+                            </x-alert>
+                        @endforeach
+                    </fieldset>
+                @endif
 
-    <a href="{{ route('livros.index') }}">Voltar</a>
+                @if ($categorias->isEmpty())
+                    <x-alert title="Nenhuma categoria disponível" type="destructive">
+                        <x-slot name="icon">
+                            <x-lucide-circle-alert/>
+                        </x-slot>
+                        Cadastre uma categoria antes de incluir um livro.
+                    </x-alert>
 
-    <br>
-    <br>
+                    <a href="{{ route('categorias.create') }}" class="btn w-max">
+                        <x-lucide-plus-circle/>
+                        Incluir categoria
+                    </a>
+                @else
+                    <x-form action="{{ route('livros.store') }}" method="post">
+                        @csrf
 
-    @if ($errors->any())
-        @foreach ($errors->all() as $err)
-            <div style="color: red;">
-                {{ $err }}
+                        <x-input
+                            id="titulo"
+                            title="Título"
+                            placeholder="Ex: Dom Casmurro"
+                            value="{{ old('titulo') }}"
+                            required
+                        />
+
+                        <x-input
+                            id="autor"
+                            title="Autor"
+                            placeholder="Ex: Machado de Assis"
+                            value="{{ old('autor') }}"
+                            required
+                        />
+
+                        <x-textarea
+                            id="descricao"
+                            title="Descrição"
+                            placeholder="Ex: Romance clássico da literatura brasileira"
+                        >{{ old('descricao') }}</x-textarea>
+
+                        <fieldset class="grid gap-2">
+                            <label for="categoria_id">Categoria</label>
+                            <select name="categoria_id" id="categoria_id" class="select" required>
+                                @foreach ($categorias as $categoria)
+                                    <option value="{{ $categoria->id }}" @selected(old('categoria_id') == $categoria->id)>
+                                        {{ $categoria->titulo }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </fieldset>
+
+                        <fieldset class="grid gap-3">
+                            <label>Status</label>
+                            <div class="flex gap-3">
+                                @foreach ([App\Enums\LivroStatus::DISPONIVEL, App\Enums\LivroStatus::EMPRESTADO] as $status)
+                                    <x-radio
+                                        name="status"
+                                        id="status_{{ $status->value }}"
+                                        value="{{ $status->value }}"
+                                        checked="{{ old('status', App\Enums\LivroStatus::DISPONIVEL->value) === $status->value }}"
+                                        label="{{ ucfirst(strtolower($status->name)) }}"
+                                    />
+                                @endforeach
+                            </div>
+                        </fieldset>
+                    </x-form>
+                @endif
             </div>
-        @endforeach
-    @endif
-
-    <form action="{{ route('livros.store') }}" method="post">
-        @csrf
-        <div>
-            <label for="titulo">Título</label>
-            <input type="text" name="titulo" id="titulo" value="{{ old('titulo') }}">
-        </div>
-        <div>
-            <label for="autor">Autor</label>
-            <input type="text" name="autor" id="autor" value="{{ old('autor') }}">
-        </div>
-        <div>
-            <label for="descricao">Descrição</label>
-            <textarea name="descricao" id="descricao">{{ old('descricao') }}</textarea>
-        </div>
-        <div>
-            <label for="categoria_id">Categoria</label>
-            <select name="categoria_id" id="categoria_id">
-                @foreach ($categorias as $categoria)
-                    <option value="{{ $categoria->id }}" @selected(old('categoria_id') == $categoria->id)>
-                        {{ $categoria->titulo }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-        <input type="submit" value="Salvar">
-    </form>
+        </x-card>
+    </div>
 
 @endsection

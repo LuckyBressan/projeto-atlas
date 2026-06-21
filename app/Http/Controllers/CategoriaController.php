@@ -28,7 +28,7 @@ class CategoriaController extends Controller
     {
         $dados = $this->validateCategoria($request);
         Categoria::create($dados);
-        return redirect()->route('categorias.index');
+        return redirect()->route('categorias.index')->with('success', 'Categoria cadastrada com sucesso.');
     }
 
     public function edit(Categoria $categoria)
@@ -43,7 +43,7 @@ class CategoriaController extends Controller
     {
         $dados = $this->validateCategoria($request);
         $categoria->update($dados);
-        return redirect()->route('categorias.index');
+        return redirect()->route('categorias.index')->with('success', 'Categoria alterada com sucesso.');
     }
 
     public function delete(Categoria $categoria)
