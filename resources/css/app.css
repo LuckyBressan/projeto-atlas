@@ -10,10 +10,40 @@
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
+:root{
+    --brand: #197278;
+    --brand-dark: #283d3b;
+    --brand-light: #edddd4;
+    --brand-danger: #c44536;
+    --brand-accent: #772e25;
+
+    /* mappings for existing variable usage */
+    --color-primary: var(--brand);
+    --color-primary-dark: var(--brand-dark);
+    --color-red-500: var(--brand-danger);
+    --color-yellow-500: var(--brand-light);
+
+    --sidebar: var(--brand) !important;
+    --sidebar-accent-foreground: var(--brand-light) !important;
+    --sidebar-accent: #283d3b23 !important;
+}
+
 .btn-edit {
-    color: var(--color-yellow-500);
+    color: var(--brand-dark);
 }
 
 .btn-delete {
     color: var(--color-red-500);
+}
+
+.card {
+    h2 {
+        color: var(--brand-dark);
+    }
+}
+
+.sidebar {
+    * {
+        color: var(--brand-light);
+    }
 }
