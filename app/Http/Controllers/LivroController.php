@@ -32,10 +32,10 @@ class LivroController extends Controller
 
     public function store(Request $request)
     {
-        $dados['status'] = LivroStatus::DISPONIVEL->value;
         $dados = $this->validateLivro($request);
+        $dados['status'] = $dados['status'] ?? LivroStatus::DISPONIVEL->value;
         Livro::create($dados);
-        return redirect()->route('livros.index');
+        return redirect()->route('livros.index')->with('success', 'Livro cadastrado com sucesso.');
     }
 
     public function edit(Livro $livro)
@@ -53,7 +53,7 @@ class LivroController extends Controller
     {
         $dados = $this->validateLivro($request);
         $livro->update($dados);
-        return redirect()->route('livros.index');
+        return redirect()->route('livros.index')->with('success', 'Livro alterado com sucesso.');
     }
 
     public function delete(Livro $livro)
@@ -74,7 +74,7 @@ class LivroController extends Controller
             'titulo'       => ['required', 'string', 'min:2', 'max:100'],
             'descricao'    => ['nullable', 'string'],
             'autor'        => ['required', 'string', 'min:2', 'max:100'],
-            'status'       => [ Rule::enum(LivroStatus::class)],
+            'status'       => ['nullable', Rule::enum(LivroStatus::class)],
             'categoria_id' => ['required', 'exists:App\\Models\\Categoria,id'],
         ]);
     }
